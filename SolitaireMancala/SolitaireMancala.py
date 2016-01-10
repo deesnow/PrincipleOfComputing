@@ -15,6 +15,7 @@ class SolitaireMancala:
     def __init__(self):
     
 #       Create Mancala game with empty store and no houses
+        self.config = [0]
         pass
     
     def set_board(self, configuration):
