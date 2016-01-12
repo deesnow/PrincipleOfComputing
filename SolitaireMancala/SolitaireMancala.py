@@ -66,9 +66,11 @@ class SolitaireMancala:
         Move all of the stones from house to lower/left houses
         Last seed must be played in the store (house zero)
         """
-        self.config[house_num] = 0
-        for i in range(house_num):
-            self.config[i] += 1 
+        if self.is_legal_move(house_num):
+            for i in range(house_num):
+                self.config[i] += 1
+            self.config[house_num] = 0
+        
 
     def choose_move(self):
         """
@@ -136,7 +138,7 @@ def test_mancala():
     print "Choose", my_game.choose_move()
     print my_game.plan_moves()
 
-    print "Testing set_board - Computed:", str(my_game), "Expected:", str([0, 5, 3, 1, 1, 0, 0])
+
 
     # add more tests here
     
