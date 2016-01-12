@@ -55,11 +55,10 @@ class SolitaireMancala:
         """
         Check whether a given move is legal
         """
-        self.legal = False
-        if self.config[house_num] == house_num:
-            self.legal = True
+        if self.config[house_num] == house_num and (len(self.config) > house_num > 0):
+            return True
         
-        return self.legal
+        return False
 
     
     def apply_move(self, house_num):
