@@ -45,7 +45,7 @@ class SolitaireMancala:
         Check to see if all houses but house zero are empty
         """
         self.won = True
-        for i in self.config:
+        for i in range(1,len(self.config)):
             if self.config[i] != 0:
                 self.won = False
                 break                
@@ -67,7 +67,9 @@ class SolitaireMancala:
         Move all of the stones from house to lower/left houses
         Last seed must be played in the store (house zero)
         """
-        pass
+        self.config[house_num] = 0
+        for i in range(house_num):
+            self.config[i] += 1 
 
     def choose_move(self):
         """
@@ -76,7 +78,12 @@ class SolitaireMancala:
         Note that using a longer legal move would make smaller illegal
         If no legal move, return house zero
         """
-        return 0
+        self.move = 0
+        for i in range(1,len(self.config)):
+            if self.is_legal_move(i) == True:
+                self.move = i
+                break
+        return self.move
     
     def plan_moves(self):
         """
@@ -85,7 +92,25 @@ class SolitaireMancala:
         when given a choice of legal moves
         Not used in GUI version, only for machine testing
         """
-        return []
+        self.moves = []
+        self.config_backup = self.config [:]
+        tempgame = SolitaireMancala()
+        tempgame.set_board(self.config_backup)
+        print "temp game:", tempgame
+        while not tempgame.is_game_won():
+#            print "In while"
+            nextStep = tempgame.choose_move()
+#            print nextStep
+            if nextStep != 0:
+                self.moves.append(nextStep)
+                tempgame.apply_move(nextStep)
+#                 print "Temp game:", tempgame
+#                 print "Moves:", self.moves
+            else:
+                break
+            
+        return self.moves
+
  
 
 # Create tests to check the correctness of your code
@@ -105,8 +130,14 @@ def test_mancala():
     print "Testing get_num_seeds - Computed:", my_game.get_num_seeds(1), "Expected:", config1[1]
     print "Testing get_num_seeds - Computed:", my_game.get_num_seeds(3), "Expected:", config1[3]
     print "Testing get_num_seeds - Computed:", my_game.get_num_seeds(5), "Expected:", config1[5]
-    print my_game.is_game_won()
-    print my_game.is_legal_move(5)
+#   print "Is the game won ?", my_game.is_game_won()
+#    print my_game.is_legal_move(5)
+#    my_game.apply_move(5)
+#    print my_game
+    print "Choose", my_game.choose_move()
+    print my_game.plan_moves()
+
+    print "Testing set_board - Computed:", str(my_game), "Expected:", str([0, 5, 3, 1, 1, 0, 0])
 
     # add more tests here
     
