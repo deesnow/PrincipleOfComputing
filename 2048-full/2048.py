@@ -72,7 +72,9 @@ class TwentyFortyEight:
         # replace with your code
         self.grid_height = grid_height
         self.grid_width = grid_width
-        self.cells = [[0 for col in range(self.grid_width)] for row in range(self.grid_height)]
+        self.reset()
+        
+        
         
 
     def reset(self):
@@ -80,8 +82,8 @@ class TwentyFortyEight:
         Reset the game so the grid is empty except for two
         initial tiles.
         """
-        # replace with your code
-        pass
+        self.cells = [[0 for col in range(self.grid_width)] for row in range(self.grid_height)]
+        self.new_tile()
 
     def __str__(self):
         """
@@ -119,34 +121,51 @@ class TwentyFortyEight:
         4 10% of the time.
         """
         # replace with your code
-        x_value = random.random() # this produces a random number between 0 and 1
-        
-        if x_value > 0.9:
-            return 2
-        else:
-            return 4
+        self.zero_grids = []
+        for row in range(self.grid_height):
+            for col in range(self.grid_width):
+                if self.cells[row][col] == 0:
+                    self.zero_grids.append((col,row))
+        # print self.zero_grids
+        for self.newtiles_no in range(2):
+            self.chosen_grid = random.choice(self.zero_grids)
+            if random.random() > 0.9:
+                #10% value 4 in new tile
+                self.set_tile(self.chosen_grid[0], self.chosen_grid[1], 4)
+                print self.cells
+                
+            else:
+                #90% value 2 in new tile
+                print "row:", self.chosen_grid[0], "col:", self.chosen_grid[1]       
+                self.set_tile(self.chosen_grid[0], self.chosen_grid[1], 2)
+                print self.cells
+R            self.zero_grids.remove(self.chosen_grid)      
+    #         x_value = random.random() # this produces a random number between 0 and 1
+#         
+#         if x_value > 0.9:
+#             return 2
+#         else:
+#             return 4
              
 
     def set_tile(self, row, col, value):
         """
         Set the tile at position row, col to have the given value.
         """
-        # replace with your code
-        pass
+        self.cells[row][col] = value
+        
 
     def get_tile(self, row, col):
         """
         Return the value of the tile at position row, col.
         """
         # replace with your code
-        return 0
+        return self.cells[row][col]
 
 
 game = TwentyFortyEight(5,4)
-
-print game.grid_height
-print game.grid_width
 print game.cells
+
 
 
 
