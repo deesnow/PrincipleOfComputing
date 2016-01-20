@@ -83,6 +83,7 @@ class TwentyFortyEight:
         initial tiles.
         """
         self.cells = [[0 for col in range(self.grid_width)] for row in range(self.grid_height)]
+        #print self.cells
         self.new_tile()
 
     def __str__(self):
@@ -90,21 +91,21 @@ class TwentyFortyEight:
         Return a string representation of the grid for debugging.
         """
         # replace with your code
-        return ""
+        return str(self.cells)
 
     def get_grid_height(self):
         """
         Get the height of the board.
         """
         # replace with your code
-        return 0
+        return self.grid_height
 
     def get_grid_width(self):
         """
         Get the width of the board.
         """
         # replace with your code
-        return 0
+        return self.grid_width
 
     def move(self, direction):
         """
@@ -125,28 +126,22 @@ class TwentyFortyEight:
         for row in range(self.grid_height):
             for col in range(self.grid_width):
                 if self.cells[row][col] == 0:
-                    self.zero_grids.append((col,row))
-        # print self.zero_grids
+                    self.zero_grids.append((row,col))
+        #print self.zero_grids
         for self.newtiles_no in range(2):
             self.chosen_grid = random.choice(self.zero_grids)
             if random.random() > 0.9:
                 #10% value 4 in new tile
                 self.set_tile(self.chosen_grid[0], self.chosen_grid[1], 4)
-                print self.cells
+                #print self.cells
                 
             else:
                 #90% value 2 in new tile
-                print "row:", self.chosen_grid[0], "col:", self.chosen_grid[1]       
+                #print "row:", self.chosen_grid[0], "col:", self.chosen_grid[1]       
                 self.set_tile(self.chosen_grid[0], self.chosen_grid[1], 2)
-                print self.cells
-R            self.zero_grids.remove(self.chosen_grid)      
-    #         x_value = random.random() # this produces a random number between 0 and 1
-#         
-#         if x_value > 0.9:
-#             return 2
-#         else:
-#             return 4
-             
+                #print self.cells
+            self.zero_grids.remove(self.chosen_grid)      
+ 
 
     def set_tile(self, row, col, value):
         """
@@ -163,8 +158,10 @@ R            self.zero_grids.remove(self.chosen_grid)
         return self.cells[row][col]
 
 
-game = TwentyFortyEight(5,4)
-print game.cells
+game = TwentyFortyEight(3,4)
+print game
+print game.get_grid_height()
+print game.get_grid_width()
 
 
 
