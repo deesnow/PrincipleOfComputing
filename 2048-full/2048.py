@@ -32,8 +32,34 @@ class TwentyFortyEight:
         self.grid_width = grid_width
         self.reset()
         
+        # create dictionary for grid list (row, col), the key is direction UP, DOWN, .....
+        self.direction_dic = {}
+        
+        # UP
+        self.direction_dic['UP'] = []
+        for steps in range(self.grid_width):
+            self.direction_dic['UP'].append(self.traverse((0, 0 + steps), (1, 0), self.grid_height))
+        print "UP", self.direction_dic['UP']
+        
+        #DOWN
+        self.direction_dic['DOWN'] = []
+        for steps in range(self.grid_width):
+            self.direction_dic['DOWN'].append(self.traverse((self.grid_height, 0 + steps), (-1, 0), self.grid_height))
+        print "DOWN", self.direction_dic['DOWN']
+        
+        #LEFT
+        self.direction_dic['LEFT'] = []
+        for steps in range(self.grid_height):
+            self.direction_dic['LEFT'].append(self.traverse((0 + steps, 0), (0, 1), self.grid_width))
+        print "LEFT", self.direction_dic['LEFT']        
         
         
+        #RIGHT        
+        self.direction_dic['RIGHT'] = []
+        for steps in range(self.grid_height):
+            self.direction_dic['RIGHT'].append(self.traverse((0 + steps, self.grid_width), (0, -1), self.grid_width))
+        print "RIGHT", self.direction_dic['RIGHT']
+        print "DICT", self.direction_dic        
 
     def reset(self):
         """
@@ -114,10 +140,30 @@ class TwentyFortyEight:
         """
         # replace with your code
         return self.cells[row][col]
+    
+    def traverse(self, start_cell, direction, num_steps):
+        """
+        Create a dict to containd list of cells for each move. The key is direction UP, DOWN, etc.
+        """
+        self.direction_list = []
+        for step in range(num_steps):
+            self.dummy_row = start_cell[0] + step * direction[0]
+            self.dummy_col = start_cell[1] + step * direction[1]
+            self.direction_list.append((self.dummy_row, self.dummy_col))
+        return self.direction_list
+            
+                 
+        
+    
+        
+  
+    
+    
+        
 
 
-game = TwentyFortyEight(3,4)
-print game
+game = TwentyFortyEight(5,3)
+print "Cells:", game.cells
 
 
 

@@ -50,26 +50,26 @@ def merge(line):
 
 #Test phase
 
-line1 = [2, 0, 2, 4]
-
-#print order_list(line1)
-
-print line1
-
-print merge(line1)
-
- 
-line2 = [0, 0, 2, 2]
-print line2
-print merge(line2)
- 
-line3 = [2, 2, 0, 0]
-print line3
-print merge(line3)
-line4 = [2, 2, 2, 2, 2]
-print line4
-print merge(line4)
-line5 = [8, 16, 16, 8]
-print line5
-print merge(line5)
+# line1 = [2, 0, 2, 4]
+# 
+# #print order_list(line1)
+# 
+# print line1
+# 
+# print merge(line1)
+# 
+#  
+# line2 = [0, 0, 2, 2]
+# print line2
+# print merge(line2)
+#  
+# line3 = [2, 2, 0, 0]
+# print line3
+# print merge(line3)
+# line4 = [2, 2, 2, 2, 2]
+# print line4
+# print merge(line4)
+# line5 = [8, 16, 16, 8]
+# print line5
+# print merge(line5)
 
