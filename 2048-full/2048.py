@@ -4,7 +4,7 @@ Clone of 2048 game.
 
 #import poc_2048_gui
 import random
-import merge
+
 
 # Directions, DO NOT MODIFY
 UP = 1
@@ -27,12 +27,15 @@ class TwentyFortyEight:
     """
 
     def __init__(self, grid_height, grid_width):
-        # replace with your code
+        
         self.grid_height = grid_height
         self.grid_width = grid_width
         self.reset()
         
-        # create dictionary for grid list (row, col), the key is direction UP, DOWN, .....
+        """
+        create dictionary for grid list (row, col), the key is direction UP, DOWN, .....
+        It's a helper for cell move
+        """
         self.direction_dic = {}
         
         # UP
@@ -45,21 +48,21 @@ class TwentyFortyEight:
         self.direction_dic['DOWN'] = []
         for steps in range(self.grid_width):
             self.direction_dic['DOWN'].append(self.traverse((self.grid_height, 0 + steps), (-1, 0), self.grid_height))
-        print "DOWN", self.direction_dic['DOWN']
+        #print "DOWN", self.direction_dic['DOWN']
         
         #LEFT
         self.direction_dic['LEFT'] = []
         for steps in range(self.grid_height):
             self.direction_dic['LEFT'].append(self.traverse((0 + steps, 0), (0, 1), self.grid_width))
-        print "LEFT", self.direction_dic['LEFT']        
+        #print "LEFT", self.direction_dic['LEFT']        
         
         
         #RIGHT        
         self.direction_dic['RIGHT'] = []
         for steps in range(self.grid_height):
             self.direction_dic['RIGHT'].append(self.traverse((0 + steps, self.grid_width), (0, -1), self.grid_width))
-        print "RIGHT", self.direction_dic['RIGHT']
-        print "DICT", self.direction_dic        
+        #print "RIGHT", self.direction_dic['RIGHT']
+        #print "DICT", self.direction_dic        
 
     def reset(self):
         """
@@ -95,9 +98,45 @@ class TwentyFortyEight:
         """
         Move all tiles in the given direction and add
         a new tile if any tiles moved.
+        UP = 1
+        DOWN = 2
+        LEFT = 3
+        RIGHT = 4
         """
-        # replace with your code
-        pass
+      
+        if direction == 1:
+            for col_number in range(self.grid_width):
+                self.curren_col = []
+                self.curren_col =  self.direction_dic['UP'][col_number]
+                self.temp_line = []
+                for coordinate in range(len(self.curren_col)):
+                    self.temp_line.append(self.get_tile(self.curren_col[coordinate][0], self.curren_col[coordinate][1]))
+                #print "Temp line:", self.temp_line 
+                self.temp_line = self.merge(self.temp_line)
+                #print "Merge line:", self.temp_line
+                for coordinate in range(len(self.curren_col)):
+                    self.set_tile(self.curren_col[coordinate][0], self.curren_col[coordinate][1], self.temp_line[coordinate])
+                print "Cells from move:", self.cells
+                    
+                    
+                    
+#             print coordinate    
+
+                
+        
+        
+        
+        elif direction == 2:
+            print 'c'    
+        elif direction == 3:
+            print 'c'
+        elif direction == 4:
+            print 'c'        
+            
+        else:
+            print 'You Suck It!'        
+        
+
 
     def new_tile(self):
         """
@@ -152,9 +191,53 @@ class TwentyFortyEight:
             self.direction_list.append((self.dummy_row, self.dummy_col))
         return self.direction_list
             
-                 
+    def order_list(self, line):
         
+        """
+        Ordering the input list for merge function
+        """
+        
+        self.origin = line
+        self.ordered = list()
+        self.no_zeros = 0
+        # push zero values back 
+        for idx in range(len(self.origin)):
+            if self.origin[idx] != 0:
+                self.ordered.append(self.origin[idx])
+            else:
+                self.no_zeros += 1
     
+        for idx in range(self.no_zeros):
+            self.ordered.append(0)
+            
+        return self.ordered
+    
+    def merge(self, line):
+        """
+        Function that merges a single row or column in 2048.
+        """    
+        self.not_merged = self.order_list(line)
+    #     print self.not_merged    
+        # Start merging
+        skip = False
+        for idx in range(len(self.not_merged)-1):
+            if skip == False:
+                if self.not_merged[idx] == self.not_merged[idx + 1]:
+                    self.not_merged[idx] += self.not_merged[idx + 1]
+                    self.not_merged[idx + 1] = 0
+                    skip = True
+    #                 print self.not_merged , idx
+                else:
+                    continue
+            else:
+                skip = False
+                continue
+        self.merged = self.order_list(self.not_merged)    
+        
+        return self.merged
+                     
+            
+        
         
   
     
@@ -162,8 +245,10 @@ class TwentyFortyEight:
         
 
 
-game = TwentyFortyEight(5,3)
+game = TwentyFortyEight(4,4)
 print "Cells:", game.cells
+game.move(1)
+
 
 
 
