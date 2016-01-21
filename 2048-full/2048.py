@@ -42,12 +42,12 @@ class TwentyFortyEight:
         self.direction_dic['UP'] = []
         for steps in range(self.grid_width):
             self.direction_dic['UP'].append(self.traverse((0, 0 + steps), (1, 0), self.grid_height))
-        print "UP", self.direction_dic['UP']
+        #print "UP", self.direction_dic['UP']
         
         #DOWN
         self.direction_dic['DOWN'] = []
         for steps in range(self.grid_width):
-            self.direction_dic['DOWN'].append(self.traverse((self.grid_height, 0 + steps), (-1, 0), self.grid_height))
+            self.direction_dic['DOWN'].append(self.traverse((self.grid_height - 1, 0 + steps), (-1, 0), self.grid_height))
         #print "DOWN", self.direction_dic['DOWN']
         
         #LEFT
@@ -59,8 +59,9 @@ class TwentyFortyEight:
         
         #RIGHT        
         self.direction_dic['RIGHT'] = []
+        
         for steps in range(self.grid_height):
-            self.direction_dic['RIGHT'].append(self.traverse((0 + steps, self.grid_width), (0, -1), self.grid_width))
+            self.direction_dic['RIGHT'].append(self.traverse((0, self.grid_width - steps - 1), (0, -1), self.grid_width))
         #print "RIGHT", self.direction_dic['RIGHT']
         #print "DICT", self.direction_dic        
 
@@ -72,14 +73,19 @@ class TwentyFortyEight:
         self.cells = [[0 for col in range(self.grid_width)] for row in range(self.grid_height)]
         #print self.cells
         self.new_tile()
+        self.new_tile()
+        
 
     def __str__(self):
         """
         Return a string representation of the grid for debugging.
         """
-        # replace with your code
-        return str(self.cells)
-
+        self.cells_string = ""
+        for line in self.cells:
+            self.cells_string = self.cells_string + str(line) + "\n"
+                    
+        return self.cells_string
+    
     def get_grid_height(self):
         """
         Get the height of the board.
@@ -104,38 +110,87 @@ class TwentyFortyEight:
         RIGHT = 4
         """
       
-        if direction == 1:
+        if direction == 'UP':
             for col_number in range(self.grid_width):
                 self.curren_col = []
                 self.curren_col =  self.direction_dic['UP'][col_number]
-                self.temp_line = []
-                for coordinate in range(len(self.curren_col)):
-                    self.temp_line.append(self.get_tile(self.curren_col[coordinate][0], self.curren_col[coordinate][1]))
-                #print "Temp line:", self.temp_line 
-                self.temp_line = self.merge(self.temp_line)
-                #print "Merge line:", self.temp_line
-                for coordinate in range(len(self.curren_col)):
-                    self.set_tile(self.curren_col[coordinate][0], self.curren_col[coordinate][1], self.temp_line[coordinate])
-                print "Cells from move:", self.cells
-                    
+                self.apply_move()
+                
+#                 self.temp_line = []
+#                 for coordinate in range(len(self.curren_col)):
+#                     self.temp_line.append(self.get_tile(self.curren_col[coordinate][0], self.curren_col[coordinate][1]))
+#                 #print "Temp line:", self.temp_line 
+#                 self.temp_line = self.merge(self.temp_line)
+#                 #print "Merge line:", self.temp_line
+#                 for coordinate in range(len(self.curren_col)):
+#                     self.set_tile(self.curren_col[coordinate][0], self.curren_col[coordinate][1], self.temp_line[coordinate])
+#                 #print "Cells from move:", self.cells
+            #print self.cells        
                     
                     
 #             print coordinate    
 
-                
+ 
+        elif direction == 'DOWN':
+            for col_number in range(self.grid_width):
+                self.curren_col = []
+                self.curren_col =  self.direction_dic['DOWN'][col_number]
+                self.apply_move()
+#                 self.temp_line = []
+#                 for coordinate in range(len(self.curren_col)):
+#                     self.temp_line.append(self.get_tile(self.curren_col[coordinate][0], self.curren_col[coordinate][1]))
+#                 #print "Temp line:", self.temp_line 
+#                 self.temp_line = self.merge(self.temp_line)
+#                 #print "Merge line:", self.temp_line
+#                 for coordinate in range(len(self.curren_col)):
+#                     self.set_tile(self.curren_col[coordinate][0], self.curren_col[coordinate][1], self.temp_line[coordinate])
+#                 #print "Cells from move:", self.cells   
+            #print self.cells
+            
+        elif direction == 'LEFT':
+            for row_number in range(self.grid_height):
+                self.curren_col = []
+                self.curren_col =  self.direction_dic['LEFT'][row_number]
+                self.apply_move()
+#                 self.temp_line = []
+#                 for coordinate in range(len(self.curren_col)):
+#                     self.temp_line.append(self.get_tile(self.curren_col[coordinate][0], self.curren_col[coordinate][1]))
+#                 #print "Temp line:", self.temp_line 
+#                 self.temp_line = self.merge(self.temp_line)
+#                 #print "Merge line:", self.temp_line
+#                 for coordinate in range(len(self.curren_col)):
+#                     self.set_tile(self.curren_col[coordinate][0], self.curren_col[coordinate][1], self.temp_line[coordinate])
+#                 #print "Cells from move:", self.cells   
+            #print self.cells
         
-        
-        
-        elif direction == 2:
-            print 'c'    
-        elif direction == 3:
-            print 'c'
-        elif direction == 4:
-            print 'c'        
+        elif direction == 'RIGHT':
+            for row_number in range(self.grid_height):
+                self.curren_col = []
+                self.curren_col =  self.direction_dic['RIGHT'][row_number]
+                #print self.curren_col
+                self.apply_move() 
+            #print self.cells
             
         else:
-            print 'You Suck It!'        
+            print 'You Suck It!'
         
+        self.new_tile()        
+        
+    def apply_move(self):     
+        """
+        Apply a line merge and rewrite back
+        """
+        
+        self.temp_line = []
+        for coordinate in range(len(self.curren_col)):
+            self.temp_line.append(self.get_tile(self.curren_col[coordinate][0], self.curren_col[coordinate][1]))
+        print "Temp line:", self.temp_line 
+        self.temp_line = self.merge(self.temp_line)
+        print "Merge line:", self.temp_line
+        for coordinate in range(len(self.curren_col)):
+            self.set_tile(self.curren_col[coordinate][0], self.curren_col[coordinate][1], self.temp_line[coordinate])
+            #print "Cells from move:", self.cells
+          
 
 
     def new_tile(self):
@@ -151,19 +206,19 @@ class TwentyFortyEight:
                 if self.cells[row][col] == 0:
                     self.zero_grids.append((row,col))
         #print self.zero_grids
-        for self.newtiles_no in range(2):
-            self.chosen_grid = random.choice(self.zero_grids)
-            if random.random() > 0.9:
+        
+        self.chosen_grid = random.choice(self.zero_grids)
+        if random.random() > 0.9:
                 #10% value 4 in new tile
-                self.set_tile(self.chosen_grid[0], self.chosen_grid[1], 4)
-                #print self.cells
+            self.set_tile(self.chosen_grid[0], self.chosen_grid[1], 4)
+            #print self.cells
                 
-            else:
-                #90% value 2 in new tile
-                #print "row:", self.chosen_grid[0], "col:", self.chosen_grid[1]       
-                self.set_tile(self.chosen_grid[0], self.chosen_grid[1], 2)
-                #print self.cells
-            self.zero_grids.remove(self.chosen_grid)      
+        else:
+            #90% value 2 in new tile
+            #print "row:", self.chosen_grid[0], "col:", self.chosen_grid[1]       
+            self.set_tile(self.chosen_grid[0], self.chosen_grid[1], 2)
+            #print self.cells
+              
  
 
     def set_tile(self, row, col, value):
@@ -236,18 +291,38 @@ class TwentyFortyEight:
         
         return self.merged
                      
-            
-        
-        
-  
+
     
     
         
 
 
 game = TwentyFortyEight(4,4)
-print "Cells:", game.cells
-game.move(1)
+game.set_tile(0, 0, 2)
+game.set_tile(0, 1, 0)
+game.set_tile(0, 2, 0)
+game.set_tile(0, 3, 0)
+game.set_tile(1, 0, 0)
+game.set_tile(1, 1, 2)
+game.set_tile(1, 2, 0)
+game.set_tile(1, 3, 0)
+game.set_tile(2, 0, 0)
+game.set_tile(2, 1, 0)
+game.set_tile(2, 2, 2)
+game.set_tile(2, 3, 0)
+game.set_tile(3, 0, 0)
+game.set_tile(3, 1, 0)
+game.set_tile(3, 2, 0)
+game.set_tile(3, 3, 2)
+print game
+game.move('RIGHT')
+print game
+
+
+
+
+
+
 
 
 
