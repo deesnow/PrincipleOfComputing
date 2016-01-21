@@ -62,7 +62,7 @@ class TwentyFortyEight:
         
         for steps in range(self.grid_height):
             self.direction_dic['RIGHT'].append(self.traverse((0, self.grid_width - steps - 1), (0, -1), self.grid_width))
-        #print "RIGHT", self.direction_dic['RIGHT']
+        print "RIGHT", self.direction_dic['RIGHT']
         #print "DICT", self.direction_dic        
 
     def reset(self):
