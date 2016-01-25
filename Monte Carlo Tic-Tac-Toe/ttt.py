@@ -26,10 +26,54 @@ def mc_trial(board, player):
     """
     print board
     _boardClone = board.clone()
-    # choise a random empty square:
-    _emptySquare = random.choice(_boardClone.get_empty_squares())
-    print _emptySquare
+    _currentPlayer = player
+    _wonGame = False
+    
+    
+    while _wonGame == False:
+        # choise a random empty square:
+        try:
+            _emptySquare = random.choice(_boardClone.get_empty_squares())
+            #print "Ures :", _emptySquare
+            #print "Current Player:", _currentPlayer
+            _boardClone.move(_emptySquare[0], _emptySquare[1], _currentPlayer)
+            
+            #print _boardClone
+            if _boardClone.check_win() == None:
+                _currentPlayer = provided.switch_player(_currentPlayer)
+                
+            else:
+                _wonGame = True
+                
+            
+        
+        except IndexError:
+            # List is no more emptySquare
+            #print "Empty LIST - END"
+            break
+            
+    print "Winner:", _boardClone.check_win()
+    print _boardClone
+    
+    
+    
+def mc_update_scores(scores, board, player):
+    
+    
+    
+    
+    pass
+        
 
+
+
+
+def get_best_move(board, scores):
+    pass
+
+
+def mc_move(board, player, trials):
+    pass
 
 
 # Test game with the console or the GUI.  Uncomment whichever 
@@ -39,6 +83,19 @@ def mc_trial(board, player):
 # provided.play_game(mc_move, NTRIALS, False)        
 # poc_ttt_gui.run_gui(3, provided.PLAYERX, mc_move, NTRIALS, False)
 
+
+"""
+TESTING Phase
+"""
+
 game = provided.TTTBoard(3)
 
+# game.move(0, 0, 2)
+# game.move(0, 1, 3)
+# game.move(1, 0, 2)
+# print game.get.emptySquare()
+# print game
+
 mc_trial(game, 2)
+print 
+#print game
