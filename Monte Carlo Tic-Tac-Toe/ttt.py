@@ -10,8 +10,8 @@ import poc_ttt_provided as provided
 # You may change the values of these constants as desired, but
 #  do not change their names.
 NTRIALS = 1         # Number of trials to run
-SCORE_CURRENT = 1.0 # Score for squares played by the current player
-SCORE_OTHER = 1.0   # Score for squares played by the other player
+SCORE_CURRENT = 2 # Score for squares played by the current player
+SCORE_OTHER = 1   # Score for squares played by the other player
     
 # Add your functions here.
 
@@ -25,7 +25,7 @@ def mc_trial(board, player):
      In other words, the function should modify the board input.
     """
     print board
-    _boardClone = board.clone()
+    
     _currentPlayer = player
     _wonGame = False
     
@@ -33,13 +33,13 @@ def mc_trial(board, player):
     while _wonGame == False:
         # choise a random empty square:
         try:
-            _emptySquare = random.choice(_boardClone.get_empty_squares())
+            _emptySquare = random.choice(board.get_empty_squares())
             #print "Ures :", _emptySquare
             #print "Current Player:", _currentPlayer
-            _boardClone.move(_emptySquare[0], _emptySquare[1], _currentPlayer)
+            board.move(_emptySquare[0], _emptySquare[1], _currentPlayer)
             
-            #print _boardClone
-            if _boardClone.check_win() == None:
+            #print board
+            if board.check_win() == None:
                 _currentPlayer = provided.switch_player(_currentPlayer)
                 
             else:
@@ -52,17 +52,55 @@ def mc_trial(board, player):
             #print "Empty LIST - END"
             break
             
-    print "Winner:", _boardClone.check_win()
-    print _boardClone
+    print "Winner:", board.check_win()
+    print board
     
+
+def iniScores(dim):
+    zeroScores = [[0 for dummycol in range(dim)] for dummyrow in range(dim)]
+    return zeroScores
     
     
 def mc_update_scores(scores, board, player):
+    """
+    This function takes a grid of scores (a list of lists) with the same dimensions
+    as the Tic-Tac-Toe board, a board from a completed game, and which player the machine player is.
+    The function should score the completed board and update the scores grid. As the function updates
+    the scores grid directly, it does not return anything,
+    """
+    dim = board.get_dim()
+    
+    if board.check_win() == 4:
+        return scores
+    
+    elif board.check_win() == player:
+        for row in range(dim):
+            for col in range(dim):
+                if board.square(row, col) == 1:
+                    continue
+                elif board.square(row, col) == player:
+                    scores[row][col] += SCORE_CURRENT
+                
+                else:
+                    scores[row][col] -= SCORE_OTHER
+                        
+        return scores
+    
+    else:
+        for row in range(dim):
+            for col in range(dim):
+                if board.square(row, col) == 1:
+                    continue
+                elif board.square(row, col) == player:
+                    scores[row][col] -= SCORE_CURRENT
+                
+                else:
+                    scores[row][col] += SCORE_OTHER
+                
+        return scores
     
     
     
-    
-    pass
         
 
 
@@ -90,12 +128,13 @@ TESTING Phase
 
 game = provided.TTTBoard(3)
 
-# game.move(0, 0, 2)
-# game.move(0, 1, 3)
-# game.move(1, 0, 2)
-# print game.get.emptySquare()
-# print game
-
+#scores = iniScores(game.get_dim())
+scores = [[-1, 2, -1], [2, 2, 2], [0, 0, -1]]
 mc_trial(game, 2)
-print 
+print mc_update_scores(scores, game, 2)
+
+
+
+#mc_trial(game, 2)
+#print 
 #print game
