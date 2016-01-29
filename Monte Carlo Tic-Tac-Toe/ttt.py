@@ -127,11 +127,12 @@ TESTING Phase
 """
 
 game = provided.TTTBoard(3)
+game1 = game.clone()
 
 #scores = iniScores(game.get_dim())
 scores = [[-1, 2, -1], [2, 2, 2], [0, 0, -1]]
-mc_trial(game, 2)
-print mc_update_scores(scores, game, 2)
+mc_trial(game1, 2)
+print mc_update_scores(scores, game1, 2)
 
 
 
