@@ -9,7 +9,7 @@ import poc_ttt_provided as provided
 # Constants for Monte Carlo simulator
 # You may change the values of these constants as desired, but
 #  do not change their names.
-NTRIALS = 1         # Number of trials to run
+NTRIALS = 10         # Number of trials to run
 SCORE_CURRENT = 2 # Score for squares played by the current player
 SCORE_OTHER = 1   # Score for squares played by the other player
     
@@ -24,42 +24,63 @@ def mc_trial(board, player):
      The modified board will contain the state of the game, so the function does not return anything. 
      In other words, the function should modify the board input.
     """
-    print board
+    #print board
     
-    _currentPlayer = player
-    _wonGame = False
+    current_player = player
+    won_game = False
     
     
-    while _wonGame == False:
+    while won_game == False:
         # choise a random empty square:
         try:
-            _emptySquare = random.choice(board.get_empty_squares())
-            #print "Ures :", _emptySquare
-            #print "Current Player:", _currentPlayer
-            board.move(_emptySquare[0], _emptySquare[1], _currentPlayer)
+            empty_square = random.choice(board.get_empty_squares())
+            #print "Ures :", empty_square
+            #print "Current Player:", current_player
+            board.move(empty_square[0], empty_square[1], current_player)
             
             #print board
             if board.check_win() == None:
-                _currentPlayer = provided.switch_player(_currentPlayer)
+                current_player = provided.switch_player(current_player)
                 
             else:
-                _wonGame = True
+                won_game = True
                 
             
         
         except IndexError:
-            # List is no more emptySquare
+            # List is no more empty_square
             #print "Empty LIST - END"
             break
             
-    print "Winner:", board.check_win()
-    print board
+#     print "Winner:", board.check_win()
+#     print board
+     
+
+def init_scores(dim):
+    """
+    Init a scores list with 
+    """
+    zero_scores = [[0 for dummycol in range(dim)] for dummyrow in range(dim)]
+    return zero_scores
     
 
-def iniScores(dim):
-    zeroScores = [[0 for dummycol in range(dim)] for dummyrow in range(dim)]
-    return zeroScores
+def get_scores_min(scores, dim):
+    """
+    Helper function for update_score
+    """
+    scores_min = min(scores[0])
+    for dummyrow in range(1, dim):
+        if min(scores[dummyrow]) < scores_min:
+            scores_min = min(scores[dummyrow])
+            
+    return scores_min
+        
+        
     
+    
+    
+    
+
     
 def mc_update_scores(scores, board, player):
     """
@@ -100,18 +121,58 @@ def mc_update_scores(scores, board, player):
         return scores
     
     
-    
-        
-
-
-
 
 def get_best_move(board, scores):
-    pass
+    """
+    This function takes a current board and a grid of scores. 
+    The function should find all of the empty squares with the 
+    maximum score and randomly return one of them as a (row, column) tuple. 
+    It is an error to call this function with a board that has 
+    no empty squares (there is no possible next move), so your function may 
+    do whatever it wants in that case. The case where the board is full will not be tested.
+    """
+    #print "Get BS Started"
+    best_score = get_scores_min(scores, board.get_dim())
+    best_squares = []
+    empty_squares = board.get_empty_squares()
+    for square in empty_squares:
+        if scores[square[0]][square[1]] > best_score:
+            best_score = scores[square[0]][square[1]]
+            best_squares = []
+            best_squares.append(square)
+            
+        elif scores[square[0]][square[1]] == best_score:
+            
+            best_squares.append(square)
+            
+    
+            
+    #print "best_score:", best_score        
+    if len(best_squares) > 1:
+        return random.choice(best_squares)
+    else:
+        return best_squares[0]
 
 
 def mc_move(board, player, trials):
-    pass
+    """
+    This function takes a current board, which player the machine player is, 
+    and the number of trials to run. The function should use the Monte Carlo 
+    simulation described above to return a move for the machine player in the 
+    form of a (row, column) tuple. Be sure to use the other functions you have written!
+    """
+    scores = init_scores(board.get_dim())
+    
+    
+    for dummytrial in range(trials):
+        temp_game = board.clone()
+        mc_trial(temp_game, player)
+        mc_update_scores(scores, temp_game, player)
+        
+    #print scores
+    print "Scores:", scores
+    #print temp_game
+    return get_best_move(board, scores)
 
 
 # Test game with the console or the GUI.  Uncomment whichever 
@@ -122,17 +183,41 @@ def mc_move(board, player, trials):
 # poc_ttt_gui.run_gui(3, provided.PLAYERX, mc_move, NTRIALS, False)
 
 
-"""
-TESTING Phase
-"""
+# """
+#  TESTING Phase
+# """
+#    
+# 
+# game1 = provided.TTTBoard(3)
+#      
+# game1.move(0, 0, 2)
+# game1.move(0, 1, 2)
+# game1.move(0, 2, 3)
+# #game1.move(1, 0, 3)
+# game1.move(1, 1, 2)
+# # game1.move(1, 2, 2)
+# game1.move(2, 0, 3)
+# #game1.move(2, 1, 3)
+# game1.move(2, 2, 3)   
+#     
+#     
+# print "Game board"
+# print game1
+# 
+# 
+# # scores = [[0, 0, 0], [-9, 0, 3], [0, 14, 0]]
+# # 
+# # print "Best move:", get_best_move(game1, scores) 
+# 
+# print "Next move:", mc_move(game1, 2, NTRIALS)   
+ 
 
-game = provided.TTTBoard(3)
-game1 = game.clone()
+    
+ 
+  
 
-#scores = iniScores(game.get_dim())
-scores = [[-1, 2, -1], [2, 2, 2], [0, 0, -1]]
-mc_trial(game1, 2)
-print mc_update_scores(scores, game1, 2)
+  
+  
 
 
 
